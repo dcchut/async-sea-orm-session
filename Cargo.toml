@@ -1,6 +1,6 @@
 [package]
 name = "async-sea-orm-session"
-version = "0.1.0+dev0"
+version = "0.1.0+dev1"
 edition = "2021"
 authors = ["Robert Usher <266585+dcchut@users.noreply.github.com>"]
 license = "MIT OR Apache-2.0"
