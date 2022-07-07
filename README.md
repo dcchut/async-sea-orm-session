@@ -2,7 +2,7 @@
 
 [![Latest version](https://img.shields.io/crates/v/async-sea-orm-session)](https://crates.io/crates/async-sea-orm-session)
 [![crates.io downloads](https://img.shields.io/crates/d/async-sea-orm-session)](https://crates.io/crates/async-sea-orm-session)
-[![Build Status](https://img.shields.io/github/workflow/status/dcchut/async-sea-orm-session/Push%20action/master)](https://github.com/dcchut/async-sea-orm-session/actions)
+[![Build Status](https://img.shields.io/github/workflow/status/dcchut/async-sea-orm-session/Push%20action/main)](https://github.com/dcchut/async-sea-orm-session/actions)
 ![Apache/MIT2.0 License](https://img.shields.io/crates/l/async-sea-orm-session)
 
 An [async-session](https://github.com/http-rs/async-session) backend implemented
