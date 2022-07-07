@@ -24,7 +24,6 @@ migration = ["sea-orm-migration"]
 async-session = { version = "3.0" }
 sea-orm = { version = "0.8" }
 sea-orm-migration = { version = "0.8", optional = true }
-serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1.0" }
 
 [dev-dependencies]
