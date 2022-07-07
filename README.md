@@ -9,6 +9,8 @@ An [async-session](https://github.com/http-rs/async-session) backend implemented
 using [sea-orm](https://github.com/SeaQL/sea-orm), heavily inspired by
 [async-sqlx-session](https://github.com/jbr/async-sqlx-session).
 
+More information can be found in the [crate documentation](https://docs.rs/async-sea-orm-session).
+
 ## Basic usage
 
 In the following example we create a `DatabaseSessionStore`, which implements
