@@ -1,4 +1,4 @@
-//! Utilities to assist in migrating your database.
+//! This module contains migrations to help adding the sessions table required for this crate.
 //!
 //! # Example - Single migration
 //! If you don't need to run any other migrations the [`Migrator`] struct can be used directly
@@ -47,11 +47,9 @@
 //!     }
 //! }
 //! ```
-use async_session::async_trait;
-#[doc(hidden)]
-pub use sea_orm_migration::prelude::*;
-
 use crate::sessions;
+use async_session::async_trait;
+use sea_orm_migration::prelude::*;
 
 pub struct Migrator;
 

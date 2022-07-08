@@ -39,7 +39,15 @@ async fn main() -> Result<(), sea_orm::DbErr> {
 
 ## Examples
 
-TODO
+There are full examples in the `examples` directory of the repository.
+
+- **axum-example**
+
+  This example combines the [axum](https://github.com/tokio-rs/axum) web application
+  framework with `async-sea-orm-session` for session storage and [tower-cookies](https://github.com/imbolc/tower-cookies)
+  for cookie management.
+
+Feel free to contribute examples showing different setups!
 
 ## License
 

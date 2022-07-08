@@ -30,7 +30,7 @@
 //!
 //! # Examples
 //!
-//! TODO
+//! For examples see the README in the [repository](https://github.com/dcchut/async-sea-orm-session).
 //!
 //! # License
 //!
@@ -50,6 +50,7 @@ use sea_query::OnConflict;
 #[cfg(feature = "migration")]
 #[cfg_attr(docsrs, doc(cfg(feature = "migration")))]
 pub mod migration;
+pub mod prelude;
 mod sessions;
 
 use sessions::Entity as Session;
