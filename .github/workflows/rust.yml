@@ -9,12 +9,40 @@ jobs:
         rust: [stable]
 
     steps:
-      - uses: hecrj/setup-rust-action@v1
+      - uses: actions/checkout@v2
+
+      - uses: actions-rs/toolchain@v1
         with:
-          rust-version: ${{ matrix.rust }}
-      - uses: actions/checkout@master
-      - name: Tests
-        run: cargo +nightly fmt -- --check && cargo clippy -- -Dwarnings && cargo test --verbose && cargo check --no-default-features
-      - name: Examples
+          toolchain: ${{ matrix.rust }}
+          override: true
+          components: clippy
+
+      - uses: Swatinem/rust-cache@v1
+
+      - name: Test and clippy (main)
+        run: cargo clippy -- -Dwarnings && cargo test --verbose && cargo check --no-default-features
+
+      - name: clippy (examples)
         working-directory: examples
-        run: cargo +nightly fmt -- --check && cargo clippy -- -Dwarnings && cargo check --verbose
+        run: cargo clippy -- -Dwarnings && cargo check --verbose
+
+  fmt:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          override: true
+          components: rustfmt
+
+      - uses: Swatinem/rust-cache@v1
+
+      - name: Format (main)
+        run: cargo +nightly fmt -- --check
+
+      - name: Format (examples)
+        working-directory: examples
+        run: cargo +nightly fmt -- --check
