@@ -14,7 +14,7 @@ jobs:
           rust-version: ${{ matrix.rust }}
       - uses: actions/checkout@master
       - name: Tests
-        run: cargo fmt -- --check && cargo clippy -- -Dwarnings && cargo test --verbose
+        run: cargo fmt -- --check && cargo clippy -- -Dwarnings && cargo test --verbose && cargo check --no-default-features
       - name: Examples
         working-directory: examples
         run: cargo fmt -- --check && cargo clippy -- -Dwarnings && cargo check --verbose
