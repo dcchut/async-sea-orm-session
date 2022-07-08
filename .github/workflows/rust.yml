@@ -15,3 +15,6 @@ jobs:
       - uses: actions/checkout@master
       - name: Tests
         run: cargo fmt -- --check && cargo clippy -- -Dwarnings && cargo test --verbose
+      - name: Examples
+        working-directory: examples
+        run: cargo fmt -- --check && cargo clippy -- -Dwarnings && cargo check --verbose
