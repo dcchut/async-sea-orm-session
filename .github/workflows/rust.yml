@@ -23,6 +23,25 @@ jobs:
       - name: Test and clippy (main)
         run: cargo clippy -- -Dwarnings && cargo test --verbose && cargo check --no-default-features
 
+  examples:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        rust: [stable]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.rust }}
+          override: true
+          components: clippy
+          profile: minimal
+
+      - uses: Swatinem/rust-cache@v1
+
       - name: clippy (examples)
         working-directory: examples
         run: cargo clippy -- -Dwarnings && cargo check --verbose
