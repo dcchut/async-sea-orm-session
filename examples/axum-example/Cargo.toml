@@ -7,7 +7,7 @@ edition = "2021"
 anyhow = "1.0"
 async-sea-orm-session = { path = "../.." }
 axum = "0.5"
-sea-orm = { version = "0.8", features = ["runtime-tokio-rustls", "sqlx-sqlite"] }
+sea-orm = { version = "0.9", features = ["runtime-tokio-rustls", "sqlx-sqlite"] }
 serde = { version = "1.0", features = ["derive"] }
 tokio = { version = "1.19", features = ["rt", "macros"] }
 tower-cookies = "0.7"
