@@ -5,7 +5,6 @@ use axum::http::StatusCode;
 use axum::response::IntoResponse;
 use axum::routing::get;
 use axum::{async_trait, Extension, Json, Router};
-use sea_orm::{Database, DatabaseConnection};
 use serde::{Deserialize, Serialize};
 use std::net::SocketAddr;
 use tower_cookies::{Cookie, CookieManagerLayer, Cookies};
