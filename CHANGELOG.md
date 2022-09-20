@@ -6,4 +6,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.2] - 2022-09-20
 ### Fixed
-- Fixed multiple issues when using postgres backend https://github.com/dcchut/async-sea-orm-session/pull/4 (thanks https://github.com/kaibyao)
+- Fixed multiple issues when using postgres backend https://github.com/dcchut/async-sea-orm-session/pull/4 (thanks [@kaibyao](https://github.com/kaibyao))
