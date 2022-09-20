@@ -1,5 +1,9 @@
 name: Push action
-on: [push]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
 jobs:
   test:
     runs-on: ${{ matrix.os }}
@@ -18,12 +22,12 @@ jobs:
           components: clippy
           profile: minimal
 
-      - uses: Swatinem/rust-cache@v1
+      - uses: Swatinem/rust-cache@v2
 
       - name: Test and clippy (main)
         run: cargo clippy -- -Dwarnings && cargo test --verbose && cargo check --no-default-features
 
-  examples:
+  example-lint:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -40,11 +44,83 @@ jobs:
           components: clippy
           profile: minimal
 
-      - uses: Swatinem/rust-cache@v1
+      - uses: Swatinem/rust-cache@v2
 
       - name: clippy (examples)
         working-directory: examples
         run: cargo clippy -- -Dwarnings && cargo check --verbose
+
+  example-sqlite:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        rust: [stable]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.rust }}
+          override: true
+          profile: minimal
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: "Test example server"
+        working-directory: examples/axum-example
+        # This should really be a Python script or something, but this is fine for now.
+        run: |
+          cargo build
+          cargo run &
+          sleep 5
+          curl http://localhost:3000 --cookie .cookies --cookie-jar .cookies
+          curl http://localhost:3000 --cookie .cookies --cookie-jar .cookies > output
+          test "$(cat output)" -eq "2"
+
+  example-postgres:
+    # services require linux runner
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rust: [stable]
+
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_DB: axum_example
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: ${{ matrix.rust }}
+          override: true
+          profile: minimal
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: "Test example server"
+        working-directory: examples/axum-example
+        # This should really be a Python script or something, but this is fine for now.
+        run: |
+          cargo build --features postgres
+          DATABASE_URI=postgres://postgres:postgres@localhost/axum_example cargo run --features postgres &
+          sleep 5
+          curl http://localhost:3000 --cookie .cookies --cookie-jar .cookies
+          curl http://localhost:3000 --cookie .cookies --cookie-jar .cookies > output
+          test "$(cat output)" -eq "2"
 
   fmt:
     runs-on: ubuntu-latest

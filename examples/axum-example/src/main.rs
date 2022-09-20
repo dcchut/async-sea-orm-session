@@ -25,7 +25,10 @@ async fn main() -> Result<()> {
         .init();
 
     // We use an in-memory sqlite database for the purposes of this example.
-    let db: DatabaseConnection = Database::connect("sqlite::memory:").await?;
+    let db: DatabaseConnection = Database::connect(
+        std::env::var("DATABASE_URI").unwrap_or_else(|_| "sqlite::memory:".to_string()),
+    )
+    .await?;
 
     // Create the store and create the tables required for storing session information.
     let store = DatabaseSessionStore::new(db.clone());
