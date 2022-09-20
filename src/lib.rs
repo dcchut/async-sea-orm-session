@@ -109,10 +109,10 @@ impl SessionStore for DatabaseSessionStore {
                 .columns(vec![sessions::Column::Id, sessions::Column::Session])
                 .values(vec![
                     session.id().into(),
-                    serde_json::to_string(&session)?.into(),
+                    serde_json::to_value(&session)?.into(),
                 ])?
                 .on_conflict(
-                    OnConflict::new()
+                    OnConflict::column(sessions::Column::Id)
                         .update_columns([sessions::Column::Session])
                         .to_owned(),
                 ),
