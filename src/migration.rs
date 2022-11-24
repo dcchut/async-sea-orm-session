@@ -47,7 +47,6 @@
 //!     }
 //! }
 //! ```
-use crate::sessions;
 use async_session::async_trait;
 use sea_orm_migration::prelude::*;
 
@@ -73,19 +72,10 @@ impl MigrationTrait for SessionTableMigration {
         manager
             .create_table(
                 sea_query::Table::create()
-                    .table(sessions::Entity)
+                    .table(Session::Table)
                     .if_not_exists()
-                    .col(
-                        ColumnDef::new(sessions::Column::Id)
-                            .text()
-                            .not_null()
-                            .primary_key(),
-                    )
-                    .col(
-                        ColumnDef::new(sessions::Column::Session)
-                            .json_binary()
-                            .not_null(),
-                    )
+                    .col(ColumnDef::new(Session::Id).text().not_null().primary_key())
+                    .col(ColumnDef::new(Session::Session).json_binary().not_null())
                     .to_owned(),
             )
             .await?;
@@ -95,8 +85,15 @@ impl MigrationTrait for SessionTableMigration {
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
         manager
-            .drop_table(sea_query::Table::drop().table(sessions::Entity).to_owned())
+            .drop_table(sea_query::Table::drop().table(Session::Table).to_owned())
             .await?;
         Ok(())
     }
+}
+
+#[derive(Iden)]
+pub enum Session {
+    Table,
+    Id,
+    Session,
 }
