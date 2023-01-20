@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+# 0.2.0 - 2023-01-20
+### Changed
+- Updated sea-orm to 0.10.
+
 ## 0.1.2 - 2022-09-20
 ### Fixed
 - Fixed multiple issues when using postgres backend https://github.com/dcchut/async-sea-orm-session/pull/4 (thanks [@kaibyao](https://github.com/kaibyao))
