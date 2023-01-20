@@ -1,6 +1,6 @@
 [package]
 name = "async-sea-orm-session"
-version = "0.1.2"
+version = "0.2.0"
 edition = "2021"
 authors = ["Robert Usher <266585+dcchut@users.noreply.github.com>"]
 license = "MIT OR Apache-2.0"
@@ -22,10 +22,10 @@ migration = ["sea-orm-migration"]
 
 [dependencies]
 async-session = { version = "3.0" }
-sea-orm = { version = "0.9" }
-sea-orm-migration = { version = "0.9", optional = true }
+sea-orm = { version = "0.10" }
+sea-orm-migration = { version = "0.10", optional = true }
 serde_json = { version = "1.0" }
 
 [dev-dependencies]
-tokio = { version = "1.19", features = ["rt", "macros"]}
-sea-orm = { version = "0.9", features = ["runtime-tokio-rustls", "sqlx-sqlite"] }
+tokio = { version = "1.24", features = ["rt", "macros"]}
+sea-orm = { version = "0.10", features = ["runtime-tokio-rustls", "sqlx-sqlite"] }
