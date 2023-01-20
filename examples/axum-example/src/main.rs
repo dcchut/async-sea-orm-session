@@ -1,10 +1,11 @@
 use anyhow::Result;
 use async_sea_orm_session::prelude::*;
-use axum::extract::{FromRequest, RequestParts};
+use axum::extract::{FromRef, FromRequestParts, State};
+use axum::http::request::Parts;
 use axum::http::StatusCode;
 use axum::response::IntoResponse;
 use axum::routing::get;
-use axum::{async_trait, Extension, Json, Router};
+use axum::{async_trait, Json, Router};
 use sea_orm::{Database, DatabaseConnection};
 use serde::{Deserialize, Serialize};
 use std::net::SocketAddr;
@@ -30,13 +31,12 @@ async fn main() -> Result<()> {
     )
     .await?;
 
-    // Create the store and create the tables required for storing session information.
-    let store = DatabaseSessionStore::new(db.clone());
+    // Create the tables requires for storing session information
     Migrator::up(&db, None).await?;
 
     let app = Router::new()
         .route("/", get(handler))
-        .layer(Extension(store))
+        .with_state(DatabaseSessionStore::new(db.clone()))
         .layer(CookieManagerLayer::new());
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
@@ -57,7 +57,7 @@ struct Count(i32);
 async fn handler(
     cookies: Cookies,
     CookieSession(mut session): CookieSession,
-    Extension(store): Extension<DatabaseSessionStore>,
+    State(store): State<DatabaseSessionStore>,
 ) -> impl IntoResponse {
     // Get the current hit count out of the session, increment it, then put it back in the session.
     let mut count = session.get(HIT_COUNT_KEY).unwrap_or(Count(0));
@@ -81,16 +81,20 @@ async fn handler(
 }
 
 #[async_trait]
-impl<B> FromRequest<B> for CookieSession
+impl<B> FromRequestParts<B> for CookieSession
 where
-    B: Send,
+    B: Send + Sync,
+    DatabaseSessionStore: FromRef<B>,
 {
     type Rejection = (StatusCode, &'static str);
 
-    async fn from_request(req: &mut RequestParts<B>) -> std::result::Result<Self, Self::Rejection> {
+    async fn from_request_parts(
+        parts: &mut Parts,
+        state: &B,
+    ) -> std::result::Result<Self, Self::Rejection> {
         // Here we use `DatabaseSessionStore`, but really any implementor of
         // [`async_session::SessionStore`] would work here!
-        let Extension(store) = Extension::<DatabaseSessionStore>::from_request(req)
+        let State(store) = State::<DatabaseSessionStore>::from_request_parts(parts, state)
             .await
             .map_err(|_| {
                 (
@@ -100,7 +104,7 @@ where
             })?;
 
         // Get the session cookie and load the corresponding session.
-        let cookies = Cookies::from_request(req).await?;
+        let cookies = Cookies::from_request_parts(parts, state).await?;
         if let Some(session_cookie) = cookies.get(SESSION_COOKIE_NAME) {
             if let Ok(Some(session)) = store.load_session(session_cookie.value().to_string()).await
             {
