@@ -4,8 +4,8 @@
 //! If you don't need to run any other migrations the [`Migrator`] struct can be used directly
 //!
 //! ```rust
-//! use async_sea_orm_session::migration::Migrator;
 //! use async_sea_orm_session::DatabaseSessionStore;
+//! use async_sea_orm_session::migration::Migrator;
 //! use sea_orm::{Database, DatabaseConnection};
 //! use sea_orm_migration::MigratorTrait;
 //!

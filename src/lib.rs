@@ -8,8 +8,8 @@
 //! the [`SessionStore`] trait from [`async_session`].
 //!
 //! ```rust,no_run
-//! use async_sea_orm_session::migration::Migrator;
 //! use async_sea_orm_session::DatabaseSessionStore;
+//! use async_sea_orm_session::migration::Migrator;
 //! use sea_orm::{Database, DatabaseConnection};
 //! use sea_orm_migration::MigratorTrait;
 //!
@@ -42,9 +42,9 @@
 //!
 //! at your option.
 #![cfg_attr(docsrs, feature(doc_cfg))]
-use async_session::{async_trait, serde_json, SessionStore};
+use async_session::{SessionStore, async_trait, serde_json};
 use sea_orm::prelude::*;
-use sea_orm::{sea_query, ConnectionTrait, DatabaseConnection, StatementBuilder};
+use sea_orm::{ConnectionTrait, DatabaseConnection, StatementBuilder, sea_query};
 use sea_query::OnConflict;
 
 #[cfg(feature = "migration")]
